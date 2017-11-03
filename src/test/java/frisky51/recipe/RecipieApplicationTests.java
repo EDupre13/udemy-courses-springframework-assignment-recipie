@@ -1,4 +1,4 @@
-package frisky51.recipie;
+package frisky51.recipe;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
