@@ -1,5 +1,7 @@
 package frisky51.recipe.domain;
 
+import frisky51.recipe.enumerations.Difficulty;
+
 import javax.persistence.*;
 import java.util.Set;
 
