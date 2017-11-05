@@ -5,6 +5,7 @@ import frisky51.recipe.enumerations.Difficulty;
 import frisky51.recipe.repositories.ICategoryRepository;
 import frisky51.recipe.repositories.IRecipeRepository;
 import frisky51.recipe.repositories.IUnitOfMeasureRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @Component
 public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEvent> {
 
@@ -32,6 +34,8 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         recipeRepository.saveAll(getRecipes());
+
+        log.debug("Loading BS data");
     }
 
     private List<Recipe> getRecipes() {
@@ -161,18 +165,17 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         Notes r2notes = new Notes();
         r2notes.setRecipeNotes("This will kill you ><");
-        r2notes.setRecipe(recipe2);
 
         recipe2.setNotes(r2notes);
 
-        recipe2.getIngredients().add(new Ingredient("this", new BigDecimal(2), tableSpoonUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("that", new BigDecimal(2), eachUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("another thing", new BigDecimal(2), eachUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("dog shit", new BigDecimal(2), eachUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("something", new BigDecimal(".5"), teaSpoonUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("cat shit", new BigDecimal(2), dashUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("dog piss", new BigDecimal(2), pintUom, recipe2));
-        recipe2.getIngredients().add(new Ingredient("rat eyes", new BigDecimal(2), cupUom, recipe2));
+        recipe2.addIngredient(new Ingredient("this", new BigDecimal(2), tableSpoonUom));
+        recipe2.addIngredient(new Ingredient("that", new BigDecimal(2), eachUom));
+        recipe2.addIngredient(new Ingredient("another thing", new BigDecimal(2), eachUom));
+        recipe2.addIngredient(new Ingredient("dog shit", new BigDecimal(2), eachUom));
+        recipe2.addIngredient(new Ingredient("something", new BigDecimal(".5"), teaSpoonUom));
+        recipe2.addIngredient(new Ingredient("cat shit", new BigDecimal(2), dashUom));
+        recipe2.addIngredient(new Ingredient("dog piss", new BigDecimal(2), pintUom));
+        recipe2.addIngredient(new Ingredient("rat eyes", new BigDecimal(2), cupUom));
 
         recipe2.getCategories().add(americanCategory);
         recipe2.getCategories().add(mexicanCategory);

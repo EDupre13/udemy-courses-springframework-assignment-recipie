@@ -2,11 +2,13 @@ package frisky51.recipe.services;
 
 import frisky51.recipe.domain.Recipe;
 import frisky51.recipe.repositories.IRecipeRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Slf4j
 @Service
 public class RecipeService implements IRecipeService {
 
@@ -18,8 +20,9 @@ public class RecipeService implements IRecipeService {
 
     @Override
     public Set<Recipe> getRecipes() {
-        Set<Recipe> recipeSet = new HashSet<>();
+        log.debug("Service started");
 
+        Set<Recipe> recipeSet = new HashSet<>();
         recipeRepository.findAll().iterator().forEachRemaining(recipeSet::add);
         return recipeSet;
     }
