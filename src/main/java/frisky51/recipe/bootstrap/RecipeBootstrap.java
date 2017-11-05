@@ -110,18 +110,37 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 
         Notes r1notes = new Notes();
         r1notes.setRecipeNotes("Get ready for the best diarrhea ever ;)");
-        r1notes.setRecipe(recipe1);
 
+        /*
+         * Needed for bidirectional relationship
+         * Should be 1 method call
+         *
+         * r1notes.setRecipe(recipe1);
+         * recipe1.setNotes(r1notes);
+         */
         recipe1.setNotes(r1notes);
 
-        recipe1.getIngredients().add(new Ingredient("dog shit", new BigDecimal(2), eachUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("something", new BigDecimal(".5"), teaSpoonUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("this", new BigDecimal(2), tableSpoonUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("that", new BigDecimal(2), eachUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("another thing", new BigDecimal(2), eachUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("cat shit", new BigDecimal(2), dashUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("dog piss", new BigDecimal(2), pintUom, recipe1));
-        recipe1.getIngredients().add(new Ingredient("rat eyes", new BigDecimal(2), cupUom, recipe1));
+        /*
+         * Redundant!
+         *
+         * recipe1.getIngredients().add(new Ingredient("dog shit", new BigDecimal(2), eachUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("something", new BigDecimal(".5"), teaSpoonUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("this", new BigDecimal(2), tableSpoonUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("that", new BigDecimal(2), eachUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("another thing", new BigDecimal(2), eachUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("cat shit", new BigDecimal(2), dashUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("dog piss", new BigDecimal(2), pintUom, recipe1));
+         * recipe1.getIngredients().add(new Ingredient("rat eyes", new BigDecimal(2), cupUom, recipe1));
+         */
+
+        recipe1.addIngredient(new Ingredient("dog shit", new BigDecimal(2), eachUom));
+        recipe1.addIngredient(new Ingredient("this", new BigDecimal(2), tableSpoonUom));
+        recipe1.addIngredient(new Ingredient("that", new BigDecimal(2), eachUom));
+        recipe1.addIngredient(new Ingredient("another thing", new BigDecimal(2), eachUom));
+        recipe1.addIngredient(new Ingredient("cat shit", new BigDecimal(2), dashUom));
+        recipe1.addIngredient(new Ingredient("dog piss", new BigDecimal(2), pintUom));
+        recipe1.addIngredient(new Ingredient("rat eyes", new BigDecimal(2), cupUom));
+        recipe1.addIngredient(new Ingredient("something", new BigDecimal(".5"), teaSpoonUom));
 
         recipe1.getCategories().add(americanCategory);
         recipe1.getCategories().add(mexicanCategory);

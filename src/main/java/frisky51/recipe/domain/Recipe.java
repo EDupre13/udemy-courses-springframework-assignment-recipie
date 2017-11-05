@@ -123,8 +123,17 @@ public class Recipe {
         return notes;
     }
 
+    // Changed to allow for cleaner code in RecipeBootstrap
     public void setNotes(Notes notes) {
         this.notes = notes;
+        notes.setRecipe(this);
+    }
+
+    // Added to alleviate redundant code in RecipeBootstrap
+    public Recipe addIngredient(Ingredient ingredient) {
+        ingredient.setRecipe(this);
+        this.ingredients.add(ingredient);
+        return this;
     }
 
     public Set<Ingredient> getIngredients() {

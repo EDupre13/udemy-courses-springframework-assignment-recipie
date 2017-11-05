@@ -22,6 +22,13 @@ public class Ingredient {
     public Ingredient() {
     }
 
+    // Added for code cleanup in RecipeBootstrap
+    public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom) {
+        this.description = description;
+        this.amount = amount;
+        this.uom = uom;
+    }
+
     public Ingredient(String description, BigDecimal amount, UnitOfMeasure uom, Recipe recipe) {
         this.description = description;
         this.amount = amount;
