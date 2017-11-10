@@ -69,7 +69,7 @@ public class IndexControllerTest {
         verify(recipeService, times(1)).getRecipes();
         verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
 
-        Set<Recipe> setInCotroller = argumentCaptor.getValue();
-        assertEquals(2, setInCotroller.size());
+        Set<Recipe> setInController = argumentCaptor.getValue();
+        assertEquals(2, setInController.size());
     }
 }
