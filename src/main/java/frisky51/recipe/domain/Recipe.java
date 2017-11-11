@@ -45,8 +45,10 @@ public class Recipe {
 
     // Changed to allow for cleaner code in RecipeBootstrap
     public void setNotes(Notes notes) {
-        this.notes = notes;
-        notes.setRecipe(this);
+        if (notes != null) {
+            this.notes = notes;
+            notes.setRecipe(this);
+        }
     }
 
     // Added to alleviate redundant code in RecipeBootstrap

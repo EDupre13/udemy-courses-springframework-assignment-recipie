@@ -1,5 +1,7 @@
 package frisky51.recipe.services;
 
+import frisky51.recipe.converters.RecipeCommandToRecipe;
+import frisky51.recipe.converters.RecipeToRecipeCommand;
 import frisky51.recipe.domain.Recipe;
 import frisky51.recipe.repositories.IRecipeRepository;
 import org.junit.Before;
@@ -21,10 +23,15 @@ public class RecipeServiceTest {
     @Mock
     IRecipeRepository recipeRepository;
 
+    @Mock
+    RecipeToRecipeCommand recipeToRecipeCommand;
+    @Mock
+    RecipeCommandToRecipe recipeCommandToRecipe;
+
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        recipeService = new RecipeService(recipeRepository);
+        recipeService = new RecipeService(recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand);
     }
 
     @Test
