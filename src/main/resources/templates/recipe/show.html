@@ -39,9 +39,9 @@
                             </div>
                             <div class="col-md-9">
                                 <ul>
-                                    <li>[PH: cat_1]</li>
-                                    <li>[PH: cat_2]</li>
-                                    <li>[PH: cat_3]</li>
+                                    <li th:remove="all">[PH: cat_1]</li>
+                                    <li th:each="category : ${recipe.categories}"
+                                        th:text="${category.getDescription()}">[PH: cat_2]</li>
                                 </ul>
                             </div>
                         </div>
@@ -51,14 +51,14 @@
                                 <h5>Prep Time:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: prep]</p>
+                                <p th:text="${recipe.prepTime + ' Min'}">[PH: prep]</p>
                             </div>
 
                             <div class="col-md-3">
                                 <h5>Difficulty:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: dif]</p>
+                                <p th:text="${recipe.difficulty}">[PH: dif]</p>
                             </div>
                         </div>
 
@@ -67,14 +67,14 @@
                                 <h5>Cook Time:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: cook]</p>
+                                <p th:text="${recipe.cookTime + ' Min'}">[PH: cook]</p>
                             </div>
 
                             <div class="col-md-3">
                                 <h5>Servings:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: servings]</p>
+                                <p th:text="${recipe.servings}">[PH: servings]</p>
                             </div>
                         </div>
 
@@ -83,14 +83,14 @@
                                 <h5>Source:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: source]</p>
+                                <p th:text="${recipe.source}">[PH: source]</p>
                             </div>
 
                             <div class="col-md-3">
                                 <h5>Url:</h5>
                             </div>
                             <div class="col-md-3">
-                                <p>[PH: url]</p>
+                                <p th:text="${recipe.url}">[PH: url]</p>
                             </div>
                         </div>
                     </div>
@@ -105,9 +105,11 @@
                         <div class="row">
                             <div class="col-md-12">
                                 <ul>
-                                    <li>[PH: ingredient_1]</li>
-                                    <li>[PH: ingredient_2]</li>
-                                    <li>[PH: ingredient_3]</li>
+                                    <li th:remove="all">[PH: ingredient_1]</li>
+                                    <li th:each="ingredient : ${recipe.ingredients}"
+                                        th:text="${ingredient.getAmount() +
+                                        ' ' + ingredient.uom.getDescription() +
+                                        ' - ' + ingredient.getDescription()}">[PH: ingredient_2]</li>
                                 </ul>
                             </div>
                         </div>
@@ -121,7 +123,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p>[PH: dir]</p>
+                                <p th:text="${recipe.directions}">[PH: dir]</p>
                             </div>
                         </div>
                     </div>
@@ -134,7 +136,7 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-md-12">
-                                <p>[PH: notes]</p>
+                                <p th:text="${recipe.notes.getRecipeNotes()}">[PH: notes]</p>
                             </div>
                         </div>
                     </div>
