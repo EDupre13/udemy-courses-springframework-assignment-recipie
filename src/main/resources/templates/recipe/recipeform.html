@@ -106,7 +106,7 @@
                             <div class="panel-body">
                                 <div class="row">
                                     <div class="col-md-12">
-                                        <ul>
+                                        <ul th:if="${not #lists.isEmpty(recipe.ingredients)}">
                                             <li th:each="ingredient : ${recipe.ingredients}"
                                                 th:text="${(ingredient.getAmount() +
                                                 ' ' + ingredient.uom.getDescription() +
