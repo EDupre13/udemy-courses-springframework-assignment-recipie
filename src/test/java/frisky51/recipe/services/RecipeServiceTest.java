@@ -87,4 +87,9 @@ public class RecipeServiceTest {
         verify(recipeRepository, times(1)).findAll();
         verify(recipeRepository, never()).findById(anyLong());
     }
+
+    @Test
+    public void testDeleteById() throws Exception {
+        Long id
+    }
 }
