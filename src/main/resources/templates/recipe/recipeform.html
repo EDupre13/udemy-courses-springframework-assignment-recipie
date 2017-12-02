@@ -101,7 +101,7 @@
                                     <h1 class="panel-title">Ingredients</h1>
                                 </div>
                                 <div class="col-md-1">
-                                    <a class="btn btn-default" href="#" role="button">Edit</a>
+                                    <a class="btn btn-default" href="#" role="button">View</a>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
                                     <ul th:if="${not #lists.isEmpty(recipe.ingredients)}">
                                         <li th:each="ingredient : ${recipe.ingredients}"
                                             th:text="${(ingredient.getAmount() +
-                                            ' ' + ingredient.unitOfMeasure.getDescription() +
+                                            ' ' + ingredient.uom.getDescription() +
                                             ' - ' + ingredient.getDescription())}">[PH]
                                         </li>
                                     </ul>
