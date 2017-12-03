@@ -1,6 +1,8 @@
 package frisky51.recipe.controllers;
 
+import frisky51.recipe.commands.IngredientCommand;
 import frisky51.recipe.commands.RecipeCommand;
+import frisky51.recipe.services.IIngredientService;
 import frisky51.recipe.services.IRecipeService;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +23,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class IngredientControllerTest {
 
     @Mock
+    IIngredientService ingredientService;
+
+    @Mock
     IRecipeService recipeService;
 
     IngredientController ingredientController;
@@ -31,7 +36,7 @@ public class IngredientControllerTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
 
-        ingredientController = new IngredientController(recipeService);
+        ingredientController = new IngredientController(recipeService, ingredientService);
         mockMvc = MockMvcBuilders.standaloneSetup(ingredientController).build();
     }
 
@@ -47,5 +52,17 @@ public class IngredientControllerTest {
                 .andExpect(model().attributeExists("recipe"));
 
         verify(recipeService, times(1)).findCommandById(anyLong());
+    }
+
+    @Test
+    public void testShowIngredient() throws Exception {
+        IngredientCommand ingredientCommand = new IngredientCommand();
+
+        when(ingredientService.findByRecipeIdAndIngredientId(anyLong(), anyLong())).thenReturn(ingredientCommand);
+
+        mockMvc.perform(get("/recipe/1/ingredient/2/show"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("recipe/ingredient/show"))
+                .andExpect(model().attributeExists("ingredient"));
     }
 }
