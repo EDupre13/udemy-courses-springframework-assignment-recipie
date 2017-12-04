@@ -1,12 +1,16 @@
 package frisky51.recipe.services;
 
 import frisky51.recipe.commands.IngredientCommand;
+import frisky51.recipe.converters.IngredientCommandToIngredient;
 import frisky51.recipe.converters.IngredientToIngredientCommand;
+import frisky51.recipe.domain.Ingredient;
 import frisky51.recipe.domain.Recipe;
 import frisky51.recipe.repositories.IRecipeRepository;
+import frisky51.recipe.repositories.IUnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Slf4j
@@ -14,12 +18,18 @@ import java.util.Optional;
 public class IngredientService implements IIngredientService {
 
     private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
     private final IRecipeRepository recipeRepository;
+    private final IUnitOfMeasureRepository unitOfMeasureRepository;
 
     public IngredientService(IngredientToIngredientCommand ingredientToIngredientCommand,
-                             IRecipeRepository recipeRepository) {
+                             IngredientCommandToIngredient ingredientCommandToIngredient,
+                             IRecipeRepository recipeRepository,
+                             IUnitOfMeasureRepository unitOfMeasureRepository) {
         this.ingredientToIngredientCommand = ingredientToIngredientCommand;
+        this.ingredientCommandToIngredient = ingredientCommandToIngredient;
         this.recipeRepository = recipeRepository;
+        this.unitOfMeasureRepository = unitOfMeasureRepository;
     }
 
     @Override
@@ -43,5 +53,47 @@ public class IngredientService implements IIngredientService {
         }
 
         return ingredientCommandOptional.get();
+    }
+
+    @Override
+    @Transactional
+    public IngredientCommand saveIngredientCommand(IngredientCommand ingredientCommand) {
+        Optional<Recipe> recipeOptional = recipeRepository.findById(ingredientCommand.getRecipeId());
+
+        if (!recipeOptional.isPresent()) {
+            // TODO: throw error if not found
+            log.error("Recipe with ID " + ingredientCommand.getRecipeId() + " not found.");
+
+            return new IngredientCommand();
+        } else {
+            Recipe recipe = recipeOptional.get();
+
+            Optional<Ingredient> ingredientOptional = recipe
+                    .getIngredients()
+                    .stream()
+                    .filter(ingredient -> ingredient.getId().equals(ingredientCommand.getId()))
+                    .findFirst();
+
+            if (ingredientOptional.isPresent()) {
+                Ingredient ingredient = ingredientOptional.get();
+                ingredient.setDescription(ingredientCommand.getDescription());
+                ingredient.setAmount(ingredientCommand.getAmount());
+                ingredient.setUom(unitOfMeasureRepository
+                        .findById(ingredientCommand.getUnitOfMeasure().getId())
+                        .orElseThrow(() -> new RuntimeException("UOM NOT FOUND")));
+                // TODO: address uom not found
+            } else {
+                // Add new ingredient
+                recipe.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
+            }
+
+            Recipe savedRecipe = recipeRepository.save(recipe);
+
+            // TODO: check for fail
+            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
+                .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientCommand.getId()))
+                .findFirst()
+                .get());
+        }
     }
 }
