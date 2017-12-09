@@ -45,7 +45,8 @@ public class IngredientService implements IIngredientService {
 
         Optional<IngredientCommand> ingredientCommandOptional = recipe.getIngredients().stream()
                 .filter(ingredient -> ingredient.getId().equals(ingredientId))
-                .map(ingredient -> ingredientToIngredientCommand.convert(ingredient)).findFirst();
+                .map(ingredient -> ingredientToIngredientCommand.convert(ingredient))
+                .findFirst();
 
         if (!ingredientCommandOptional.isPresent()) {
             // TODO: Implement error handling
@@ -84,16 +85,34 @@ public class IngredientService implements IIngredientService {
                 // TODO: address uom not found
             } else {
                 // Add new ingredient
-                recipe.addIngredient(ingredientCommandToIngredient.convert(ingredientCommand));
+                Ingredient ingredient = ingredientCommandToIngredient.convert(ingredientCommand);
+                ingredient.setRecipe(recipe);
+
+                recipe.addIngredient(ingredient);
             }
 
             Recipe savedRecipe = recipeRepository.save(recipe);
 
-            // TODO: check for fail
-            return ingredientToIngredientCommand.convert(savedRecipe.getIngredients().stream()
+            Optional<Ingredient> savedIngredientOptional = savedRecipe.getIngredients().stream()
                 .filter(recipeIngredients -> recipeIngredients.getId().equals(ingredientCommand.getId()))
-                .findFirst()
-                .get());
+                .findFirst();
+
+            // Check by description
+            if (!savedIngredientOptional.isPresent()) {
+                // Not safe... but best guess
+                savedIngredientOptional = savedRecipe.getIngredients().stream()
+                        .filter(recipeIngredients
+                                -> recipeIngredients.getDescription().equals(ingredientCommand.getDescription()))
+                        .filter(recipeIngredients
+                                -> recipeIngredients.getAmount().equals(ingredientCommand.getAmount()))
+                        .filter(recipeIngredients
+                                -> recipeIngredients.getUom()
+                                                    .getId()
+                                                    .equals(ingredientCommand.getUnitOfMeasure().getId()))
+                        .findFirst();
+            }
+
+            return ingredientToIngredientCommand.convert(savedIngredientOptional.get());
         }
     }
 }

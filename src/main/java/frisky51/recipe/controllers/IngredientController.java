@@ -1,6 +1,8 @@
 package frisky51.recipe.controllers;
 
 import frisky51.recipe.commands.IngredientCommand;
+import frisky51.recipe.commands.RecipeCommand;
+import frisky51.recipe.commands.UnitOfMeasureCommand;
 import frisky51.recipe.services.IIngredientService;
 import frisky51.recipe.services.IRecipeService;
 import frisky51.recipe.services.IUnitOfMeasureService;
@@ -41,6 +43,26 @@ public class IngredientController {
                 ingredientService.findByRecipeIdAndIngredientId(Long.valueOf(recipeId), Long.valueOf(id)));
 
         return "recipe/ingredient/show";
+    }
+
+    @GetMapping
+    @RequestMapping("/recipe/{recipeId}/ingredient/new")
+    public String newRecipe(@PathVariable String recipeId, Model model) {
+        // TODO: throw exception if null
+        RecipeCommand recipeCommand = recipeService.findCommandById(Long.valueOf(recipeId));
+
+        // need to return parent ID for hidden form property
+        IngredientCommand ingredientCommand = new IngredientCommand();
+        ingredientCommand.setRecipeId(Long.valueOf(recipeId));
+
+        model.addAttribute("ingredient", ingredientCommand);
+
+        // init uom
+        ingredientCommand.setUnitOfMeasure(new UnitOfMeasureCommand());
+
+        model.addAttribute("uomList", unitOfMeasureService.listAllUOMs());
+
+        return "recipe/ingredient/ingredientform";
     }
 
     @GetMapping
